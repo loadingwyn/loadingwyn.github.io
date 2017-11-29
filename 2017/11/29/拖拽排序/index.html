@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Loading&#39;s FE Playground">
+    <title>拖拽排序 - Loading&#39;s FE Playground</title>
+    <meta name="author" content="loading">
+    
+    
+    
+    <meta name="description" content="最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下react-beautiful-dnd，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。 这里是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一">
+<meta name="keywords" content="react,drag &amp; drop">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="拖拽排序">
+<meta property="og:url" content="https://loadingwyn.github.io/2017/11/29/拖拽排序/index.html">
+<meta property="og:site_name" content="Loading&#39;s FE Playground">
+<meta property="og:description" content="最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下react-beautiful-dnd，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。 这里是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-11-29T11:08:48.524Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拖拽排序">
+<meta name="twitter:description" content="最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下react-beautiful-dnd，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。 这里是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://loadingwyn.github.io/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-sxklfps8ywgfyyjcowvnb4gxdgt0zjts3hsguljmv9uqanxjbnitrovtbrek.min.css">
+    <!--STYLES END-->
+    
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Loading&#39;s FE Playground</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">loading</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>Web App Developer </p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/loadingwyn" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:wangynbupt@163.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            拖拽排序
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-11-29T18:28:44+08:00">
+	
+		    Nov 29, 2017
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下<code>react-beautiful-dnd</code>，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。</p>
+<p><a href="https://medium.com/@alexandereardon/rethinking-drag-and-drop-d9f5770b4e6b" target="_blank" rel="external">这里</a>是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一遍，这个时间成本也是很高的，所以我的决定是简陋一点还是用原生拖拽事件吧。。。</p>
+<p>##实现</p>
+<p>拖拽排序组件整体思路是，组件state的list数组管理需要排序的item的顺序，利用拖拽修改state。思路和实现很简单，我这里其实只是想说下实现过程的各种细节问题。</p>
+<ol>
+<li><p>容器要阻止<code>dragenter``dragover``drop</code>默认行为，即调用preventDefault，<code>drop</code>还需要组织冒泡。因为浏览器对拖拽有很多默认行为，比如Firefox下拖拽图片会在新的标签页面打开图片。</p>
+</li>
+<li><p>即使没有数据也最好随便设给dataTransfer设一个值，否则safari下会有兼容性问题。</p>
+</li>
+<li><p>dragenter事件是以鼠标进入为基准触发的，这个特点其实在交互体验上不是很好,<code>react-beautiful-dnd</code>由于是自己实现，他们选择了根据拖拽元素的中心是否进入元素来判断。</p>
+</li>
+<li><p>跟随鼠标的被拖动元素的样式想要定制是非常困难的，这也是绝大多数库选择自己实现的原因。</p>
+</li>
+</ol>
+<p>其实整个移动的js代码就一行：<code>list.splice(index, 0, list.splice(movingIndex, 1)[0]);</code> movingIndex是被移动的元素。剩下的代码全部都是在处理兼容性和样式。。。</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/drag-drop/">drag & drop</a> <a class="tag tag--primary tag--small t-link" href="/tags/react/">react</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/11/12/web图片查看器实现/" data-tooltip="react图片查看器实现">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://loadingwyn.github.io/2017/11/29/拖拽排序/">
+                    <i class="fa fa-weibo"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://loadingwyn.github.io/2017/11/29/拖拽排序/&amp;title=拖拽排序">
+                    <i class="fa fa-qq"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 loading. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/11/12/web图片查看器实现/" data-tooltip="react图片查看器实现">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://loadingwyn.github.io/2017/11/29/拖拽排序/">
+                    <i class="fa fa-weibo"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://loadingwyn.github.io/2017/11/29/拖拽排序/&amp;title=拖拽排序">
+                    <i class="fa fa-qq"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=https://loadingwyn.github.io/2017/11/29/拖拽排序/">
+                    <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="http://connect.qq.com/widget/shareqq/index.html?url=https://loadingwyn.github.io/2017/11/29/拖拽排序/&amp;title=拖拽排序">
+                    <i class="fa fa-qq"></i><span>Share on QQ</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">loading</h4>
+        
+            <div id="about-card-bio"><p>Web App Developer </p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>web developer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Beijing
+            </div>
+        
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://loadingwyn.github.io/2017/11/12/web图片查看器实现/">
+                            <h3 class="media-heading">react图片查看器实现</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 12, 2017
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://loadingwyn.github.io/2017/11/29/拖拽排序/">
+                            <h3 class="media-heading">拖拽排序</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 29, 2017
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                2 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-ivwiy10zeb8fifc4swnhkwneuk64y53w2scmdmtp8thi9cqfxh31aowtroaz.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+
+
+    </body>
+</html>

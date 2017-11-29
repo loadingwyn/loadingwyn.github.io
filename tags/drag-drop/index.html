@@ -6,19 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Loading&#39;s FE Playground">
-    <title>all-tags - Loading&#39;s FE Playground</title>
+    <title>Tag: drag &amp; drop - Loading&#39;s FE Playground</title>
     <meta name="author" content="loading">
     
     
     
     <meta property="og:type" content="blog">
-<meta property="og:title" content="all-tags">
-<meta property="og:url" content="https://loadingwyn.github.io/all-tags/index.html">
+<meta property="og:title" content="Loading&#39;s FE Playground">
+<meta property="og:url" content="https://loadingwyn.github.io/tags/drag-drop/index.html">
 <meta property="og:site_name" content="Loading&#39;s FE Playground">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-11-12T10:42:27.543Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="all-tags">
+<meta name="twitter:title" content="Loading&#39;s FE Playground">
     
     
         
@@ -168,103 +167,75 @@
                  class="
                         hasCoverMetaIn
                         ">
-                <div id="tags-archives" class="main-content-wrap">
-    <form id="filter-form" action="#">
-        <input name="tag" type="text" class="form-control input--xlarge" placeholder="Search tag" autofocus="autofocus">
-    </form>
-    <h4 class="archive-result text-color-base text-xlarge"
-        data-message-zero="no tag found"
-        data-message-one="1 tag found"
-        data-message-other="{n} tags found"></h4>
-
-        <section>
-        
-            <a class="tag tag--primary tag--small" href="#drag &amp; drop-list" data-tag="drag &amp; drop">
-                drag &amp; drop
-            </a>
-        
-            <a class="tag tag--primary tag--small" href="#imageview-list" data-tag="imageview">
-                imageview
-            </a>
-        
-            <a class="tag tag--primary tag--small" href="#react-list" data-tag="react">
-                react
-            </a>
-        
-    </section>
-    <section class="boxes">
-        
-            <div id="drag &amp; drop-list" class="archive box" data-tag="drag &amp; drop">
-                <h4 class="archive-title">
-                    <a class="link-unstyled" href="/tags/drag-drop">
-                        drag &amp; drop (1)
-                    </a>
-                </h4>
-                <ul class="archive-posts">
+                
+    <section class="postShorten-group main-content-wrap">
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title" itemprop="headline">
                     
-                        <li class="archive-post">
-                            <a class="archive-post-title" href="/2017/11/29/拖拽排序/">
-                                拖拽排序
-                            </a>
-                            <span class="archive-post-date">
-                                 - nov 29, 2017
-                            </span>
-                        </li>
+                        <a class="link-unstyled" href="/2017/11/29/拖拽排序/">
+                            拖拽排序
+                        </a>
                     
-                </ul>
-            </div>
-        
-            <div id="imageview-list" class="archive box" data-tag="imageview">
-                <h4 class="archive-title">
-                    <a class="link-unstyled" href="/tags/imageview">
-                        imageview (1)
-                    </a>
-                </h4>
-                <ul class="archive-posts">
-                    
-                        <li class="archive-post">
-                            <a class="archive-post-title" href="/2017/11/12/web图片查看器实现/">
-                                react图片查看器实现
-                            </a>
-                            <span class="archive-post-date">
-                                 - nov 12, 2017
-                            </span>
-                        </li>
-                    
-                </ul>
-            </div>
-        
-            <div id="react-list" class="archive box" data-tag="react">
-                <h4 class="archive-title">
-                    <a class="link-unstyled" href="/tags/react">
-                        react (2)
-                    </a>
-                </h4>
-                <ul class="archive-posts">
-                    
-                        <li class="archive-post">
-                            <a class="archive-post-title" href="/2017/11/29/拖拽排序/">
-                                拖拽排序
-                            </a>
-                            <span class="archive-post-date">
-                                 - nov 29, 2017
-                            </span>
-                        </li>
-                    
-                        <li class="archive-post">
-                            <a class="archive-post-title" href="/2017/11/12/web图片查看器实现/">
-                                react图片查看器实现
-                            </a>
-                            <span class="archive-post-date">
-                                 - nov 12, 2017
-                            </span>
-                        </li>
-                    
-                </ul>
-            </div>
-        
-    </section>
+                </h1>
+                <div class="postShorten-meta">
+    <time itemprop="datePublished" datetime="2017-11-29T18:28:44+08:00">
+	
+		    Nov 29, 2017
+    	
+    </time>
+    
 </div>
+
+            </div>
+            
+                <div class="postShorten-content" itemprop="articleBody">
+                    <p>最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下<code>react-beautiful-dnd</code>，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。</p>
+<p><a href="https://medium.com/@alexandereardon/rethinking-drag-and-drop-d9f5770b4e6b" target="_blank" rel="external">这里</a>是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一遍，这个时间成本也是很高的，所以我的决定是简陋一点还是用原生拖拽事件吧。。。</p>
+<p>##实现</p>
+<p>拖拽排序组件整体思路是，组件state的list数组管理需要排序的item的顺序，利用拖拽修改state。思路和实现很简单，我这里其实只是想说下实现过程的各种细节问题。</p>
+<ol>
+<li><p>容器要阻止<code>dragenter``dragover``drop</code>默认行为，即调用preventDefault，<code>drop</code>还需要组织冒泡。因为浏览器对拖拽有很多默认行为，比如Firefox下拖拽图片会在新的标签页面打开图片。</p>
+</li>
+<li><p>即使没有数据也最好随便设给dataTransfer设一个值，否则safari下会有兼容性问题。</p>
+</li>
+<li><p>dragenter事件是以鼠标进入为基准触发的，这个特点其实在交互体验上不是很好,<code>react-beautiful-dnd</code>由于是自己实现，他们选择了根据拖拽元素的中心是否进入元素来判断。</p>
+</li>
+<li><p>跟随鼠标的被拖动元素的样式想要定制是非常困难的，这也是绝大多数库选择自己实现的原因。</p>
+</li>
+</ol>
+<p>其实整个移动的js代码就一行：<code>list.splice(index, 0, list.splice(movingIndex, 1)[0]);</code> movingIndex是被移动的元素。剩下的代码全部都是在处理兼容性和样式。。。</p>
+
+                    
+                        
+                    
+                    
+                        <p>
+                            <a href="/2017/11/29/拖拽排序/#post-footer" class="postShorten-excerpt_link link">
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+        
+        <li class="pagination-number">page 1 of 1</li>
+    </ul>
+</div>
+
+</section>
+
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
