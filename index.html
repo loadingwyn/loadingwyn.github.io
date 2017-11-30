@@ -195,10 +195,9 @@
                 <div class="postShorten-content" itemprop="articleBody">
                     <p>最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下<code>react-beautiful-dnd</code>，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。</p>
 <p><a href="https://medium.com/@alexandereardon/rethinking-drag-and-drop-d9f5770b4e6b" target="_blank" rel="external">这里</a>是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一遍，这个时间成本也是很高的，所以我的决定是简陋一点还是用原生拖拽事件吧。。。</p>
-<p>##实现</p>
-<p>拖拽排序组件整体思路是，组件state的list数组管理需要排序的item的顺序，利用拖拽修改state。思路和实现很简单，我这里其实只是想说下实现过程的各种细节问题。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>拖拽排序组件整体思路是，组件state的list数组管理需要排序的item的顺序，利用拖拽修改state。思路和实现很简单，我这里其实只是想说下实现过程的各种细节问题。</p>
 <ol>
-<li><p>容器要阻止<code>dragenter``dragover``drop</code>默认行为，即调用preventDefault，<code>drop</code>还需要组织冒泡。因为浏览器对拖拽有很多默认行为，比如Firefox下拖拽图片会在新的标签页面打开图片。</p>
+<li><p>容器要阻止<code>dragenter dragover drop</code>默认行为，即调用preventDefault，<code>drop</code>还需要组织冒泡。因为浏览器对拖拽有很多默认行为，比如Firefox下拖拽图片会在新的标签页面打开图片。</p>
 </li>
 <li><p>即使没有数据也最好随便设给dataTransfer设一个值，否则safari下会有兼容性问题。</p>
 </li>
