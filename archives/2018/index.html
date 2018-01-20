@@ -6,14 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Loading&#39;s FE Playground">
-    <title>Tag: drag &amp; drop - Loading&#39;s FE Playground</title>
+    <title>Archives: 2018 - Loading&#39;s FE Playground</title>
     <meta name="author" content="loading">
     
     
     
     <meta property="og:type" content="blog">
 <meta property="og:title" content="Loading&#39;s FE Playground">
-<meta property="og:url" content="https://loadingwyn.github.io/tags/drag-drop/index.html">
+<meta property="og:url" content="https://loadingwyn.github.io/archives/2018/index.html">
 <meta property="og:site_name" content="Loading&#39;s FE Playground">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -177,15 +177,15 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2017/11/29/拖拽排序/">
-                            拖拽排序
+                        <a class="link-unstyled" href="/2018/01/20/react表单校验组件设计/">
+                            react表单校验组件设计
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-11-29T18:28:44+08:00">
+    <time itemprop="datePublished" datetime="2018-01-20T16:57:41+08:00">
 	
-		    Nov 29, 2017
+		    Jan 20, 2018
     	
     </time>
     
@@ -194,27 +194,27 @@
             </div>
             
                 <div class="postShorten-content" itemprop="articleBody">
-                    <p>最近的一个需求是图片拖拽排序功能，看到拖拽首先想到的“搬运”一下<code>react-beautiful-dnd</code>，毕竟在trello和jira里面已经见识过了，做的很漂亮。唯一的问题就是功能和体积都远远超过了我们的需求，所以自己实现更合适。</p>
-<p><a href="https://medium.com/@alexandereardon/rethinking-drag-and-drop-d9f5770b4e6b" target="_blank" rel="noopener">这里</a>是Atlassian的团队分享的关于dnd开发的要点，可见交互良好的拖拽组件考虑的点还是很多的，而要实现这些特性，原生的drag事件其实是不够的，需要js全程模拟一遍，这个时间成本也是很高的，所以我的决定是简陋一点还是用原生拖拽事件吧。。。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>拖拽排序组件整体思路是，组件state的list数组管理需要排序的item的顺序，利用拖拽修改state。思路和实现很简单，我这里其实只是想说下实现过程的各种细节问题。</p>
-<ol>
-<li><p>容器要阻止<code>dragenter dragover drop</code>默认行为，即调用preventDefault，<code>drop</code>还需要阻止冒泡。因为浏览器对拖拽有很多默认行为，比如Firefox下拖拽图片会在新的标签页面打开图片。</p>
+                    <p>最近在公司参与实现一套类似ant design功能的组件库。我在项目中主要负责Menu，Tab，Progress, Input，Radio，Checkbox，Select以及Form组件的开发。与其他样式组件不同，Form组件除了显示表单项状态（loading，成功，失败，警告）等以外，还需要对校验逻辑进行封装，提高表单开发效率。功能定位与ant design依赖的rc-menu一致。但个人认为rc-menu的api过于复杂。</p>
+<h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>表单组件根据职责可以拆分为三部分：校验逻辑执行、表单数据管理、表单样式显示，因此表单组件由三部分组成：</p>
+<ul>
+<li><p><code>validator.js</code>提供与DOM无关的校验逻辑执行对象。职责为接受校验规则对象与表单数据对象，返回执行结果（即错误信息）。支持异步和多项联合校验。</p>
 </li>
-<li><p>即使没有数据也最好随便设给dataTransfer设一个值，否则safari下会有兼容性问题。</p>
+<li><p><code>ValidationField</code>和<code>formCreator</code>。<code>formCreator</code>为高阶组件。<code>formCreator</code>为被包装的组件管理表单数据，错误信息数据以及校验方法，并通过props和context与子组件通信。<code>ValidationField</code> 与<code>formCreator</code>配合使用，<code>ValidationField</code>接受props或者context的数据和方法将子组件（input、checkbox等）与formCreator的数据绑定。</p>
 </li>
-<li><p>dragenter事件是以鼠标进入为基准触发的，这个特点其实在交互体验上不是很好,<code>react-beautiful-dnd</code>由于是自己实现，他们选择了根据拖拽元素的中心是否进入元素来判断。</p>
+<li><p><code>FormItem</code>(名字待定) 负责表单布局和表单输入组件状态的展示。</p>
 </li>
-<li><p>跟随鼠标的被拖动元素的样式想要定制是非常困难的，这也是绝大多数库选择自己实现的原因。</p>
-</li>
-</ol>
-<p>其实整个移动的js代码就一行：<code>list.splice(index, 0, list.splice(movingIndex, 1)[0]);</code> movingIndex是被移动的元素。剩下的代码全部都是在处理兼容性和样式。。。</p>
+</ul>
+<p>通过将表单分为这三部分，我们的组件有了更好的灵活性，如果不打算使用我们提供的校验方案，完全可以单独使用FormItem。</p>
+<p>在组件的实现中，利用context的地方较多。之前由于了解不够，一直对react的context有所‘恐惧’，认为context是危险的（确实应该慎重使用context）。但经过一段时间的研究，发现合理的使用context是能够大量减少工作量，使得表单组件可以以更少的api覆盖绝大多数情况。有关context的问题请参考这里<a href="https://reactjs.org/docs/context.html#how-to-use-context" target="_blank" rel="noopener">这里</a>。在这儿还要说明一下，context最重要的问题是在pureComponent下，如果props或者state不变，那么context不能使组件更新。这个问题对于我来说不是问题，整个组件库全部未使用pureComponent或其他类似逻辑。而且context的使用全部由开发人员掌握，不会要求使用者对context处理（唯一的要求就是<code>validationField</code>与FormCreator返回的组件之间不要有purecomponent组件包裹)。此外使用context的组件均提供了对应的prop作为替代选项。</p>
+<p>这里还需要说明组件库不使用pureComponent的原因，使用pureComponent优化性能在实际项目中很有必要，但是作为基础组件库，使用pureComponent会带来浅比较的成本，所以这里有个tradeoff。如果使用者真的需要pureComponent的话，完全可以在我们提供的组件上在包装一层。‘过早优化是万恶之源’这句话我感觉适用于这里的情况。</p>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; PureComponent &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">    formCreator,</span><br><span class="line">    FormItem,</span><br><span class="line">    ValidationField,</span><br><span class="line">    Input,</span><br><span class="line">    Button,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'../src'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; setTimeout &#125; <span class="keyword">from</span> <span class="string">'timers'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rules = &#123;</span><br><span class="line">    name: &#123;</span><br><span class="line">        validator(name) &#123;</span><br><span class="line">            <span class="keyword">if</span> (name === <span class="string">'loading'</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        message: <span class="function"><span class="params">name</span> =&gt;</span> <span class="string">`"<span class="subst">$&#123;name&#125;</span>" is not my name!`</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ValidateForm</span> <span class="keyword">extends</span> <span class="title">PureComponent</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; onAllValidate &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;ValidationField label=<span class="string">"Name"</span> name=<span class="string">"name"</span> validateTrigger=<span class="string">"onBlur"</span>&gt;</span><br><span class="line">                    &lt;Input placeholder=<span class="string">"值必须为loading"</span> /&gt;</span><br><span class="line">                &lt;<span class="regexp">/ValidationField&gt;</span></span><br><span class="line"><span class="regexp">                &lt;ValidationField name="date" label="Birth" helperText="值必须为1995"&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;Input /</span>&gt;</span><br><span class="line">                &lt;<span class="regexp">/ValidationField&gt;</span></span><br><span class="line"><span class="regexp">                &lt;FormItem&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;Button onClick=&#123;onAllValidate&#125;&gt;check all&lt;/</span>Button&gt;</span><br><span class="line">                &lt;<span class="regexp">/FormItem&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Demo = formCreator()(ValidateForm);</span><br></pre></td></tr></table></figure>
 
                     
                         
                     
                     
                         <p>
-                            <a href="/2017/11/29/拖拽排序/#post-footer" class="postShorten-excerpt_link link">
+                            <a href="/2018/01/20/react表单校验组件设计/#post-footer" class="postShorten-excerpt_link link">
                                 Comment and share
                             </a>
                         </p>
@@ -234,6 +234,7 @@
 </div>
 
 </section>
+
 
 
                 <footer id="footer" class="main-content-wrap">
